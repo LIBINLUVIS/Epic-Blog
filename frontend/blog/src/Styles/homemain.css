@@ -1,0 +1,121 @@
+.home-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    height: 100vh;
+    
+}
+.background{
+    display: flex;
+    flex-direction: column;
+    position: relative; 
+}
+
+.img-text{
+    position: absolute;
+    color: white;
+    top: 25%;
+    left: 30%;
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 50px;
+}
+.read-btn{
+    position: absolute;
+    width: 200px;
+    top: 65%;
+    left: 40%;
+    height: 50px;
+    border-radius: 10px;
+    border: none; 
+    background-color: #FF6719;
+    color: white;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.write-btn{
+    position: absolute;
+    width: 200px;
+    top: 80%;
+    left: 40%;
+    height: 50px;
+    border-radius: 10px;
+    border: none; 
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.backlink{
+    text-decoration: none;
+}
+
+/* @media only screen and (min-width: 600px){
+.home{
+    background-color: red;
+}
+.fotter_mobile{
+  display: none;
+}
+} */
+@media only screen and (min-width: 600px) and (max-width: 800px) {
+	#home_banner_img{
+        width: 550px;
+        height: 430px;
+    }
+    .img-text{
+        font-size: 35px;
+        left: 25%;
+    }
+    .read-btn{
+       left: 32%;
+    }
+    .write-btn{
+       left: 32%;
+    }
+}
+@media only screen and (min-width: 800px) and (max-width: 1000px) {
+	#home_banner_img{
+        width: 750px;
+        height: 430px;
+    }
+}
+@media only screen and (max-width: 600px){
+   .img-text{
+    font-size: 30px;
+    left: 20%;
+   }
+   .read-btn{
+    left: 25%;
+   }
+   .write-btn{
+    left: 25%;
+   }
+}
+@media only screen and (min-width: 1000px) and (max-width: 1120px) {
+	#home_banner_img{
+        width: 950px;
+        height: 430px;
+    }
+}
+
+@media only screen and (min-width: 1120px) and (max-width: 1285px) {
+	#home_banner_img{
+        width: 950px;
+        height: 410px;
+    }
+}
+
+@media only screen and (min-width:1366px) and (max-width:1450px){
+    #home_banner_img{
+        width: 950px;
+        height: 380px;
+    }
+    .img_text{
+      font-size: 30px;
+      left: 37%;
+    } 
+}

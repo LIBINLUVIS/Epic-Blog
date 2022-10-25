@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/Detailblog.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/Detailblog.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import EditIcon from "@mui/icons-material/Edit";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import Button from "@mui/material/Button";
+import "../Styles/detailblog.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import PersonIcon from "@mui/icons-material/Person";
+import IosShareRoundedIcon from "@mui/icons-material/IosShareRounded";
+import blogimg from "../assets/blog_img1.jpg";
+import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
+import TextField from "@mui/material/TextField";
+import axios from "../Axios.js";
+import Backdrop from "@mui/material/Backdrop";
+import { FacebookShareButton } from "react-share";
+
+
+/**
+ * Detailblog post info
+ * @type {string}
+ */
+
+function Detailblog() {
+  const { id } = useParams();
+  // const shareurl=`http://localhost:3000/blog/${id}`
+  const shareurl = `20.85.110.20/blog/${id}`;
+  const [detailblog, setDetailBlog] = useState([]);
+  const [commentfetch,setCommentfetch]=useState(false)
+  const [comment, setComment] = useState("");
+  const [commentstate, setCommentstate] = useState(false);
+  const [blogcomment, setBlogcomment] = useState([]);
+  const [detailblogfetch, setDetailblogfetch] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleclose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+  console.log(blogcomment);
+
+  useEffect(() => {
+    handleToggle();
+    axios.get(`api/posts/fetchonepost/${id}`).then((res) => {
+      if (res.status == 200) {
+        setDetailBlog(res.data);
+        handleclose();
+        setDetailblogfetch(true)
+      }
+    });
+  }, []);
+  useEffect(() => {
+    const getcommentapi = `api/comments/fetchComments/${id}`;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+    };
+    axios.get(getcommentapi, config).then((res) => {
+      if(res.status==200){
+        setBlogcomment(res.data);
+        setCommentfetch(true)
+      }
+    });
+  }, []);
+  const [selectbot, setSelectbot] = useState(false);
+
+  const chatbot = () => {
+    setSelectbot(true);
+  };
+  const closechatbot = () => {
+    setSelectbot(false);
+  };
+  const makecomment = () => {
+    setCommentfetch(false)
+    const commentapi = `api/comments/postComment/${id}`;
+    const body = JSON.stringify({ comment: comment });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+    };
+    axios
+      .post(commentapi, body, config)
+      .then((res) => {
+        console.log(res.data.id);
+        if (res.data.id == 0) {
+          setCommentstate(true);
+        }
+        if (res.data.id == 1) {
+          setCommentstate(false);
+          setComment("");
+          const getcommentapi = `api/comments/fetchComments/${id}`;
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": localStorage.getItem("user_token"),
+            },
+          };
+          axios.get(getcommentapi, config).then((res) => {
+            if(res.status==200){
+              setBlogcomment(res.data);
+              setCommentfetch(true)
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        alert(err.data);
+      });
+  };
+  const cancelcomment = () => {
+    setComment("");
+  };
+  return (
+    &lt;>
+      &lt;div
+        style={{
+          overflow: "hidden",
+          position: "fixed",
+          backgroundColor: "white",
+        }}
+        className="hide_fotter_1"
+      >
+        &lt;div className="blog_side_icons">
+          &lt;Link to="/authhome" style={{ color: "grey" }}>
+            &lt;HomeIcon id="home_icon_blog" fontSize="large" />
+          &lt;/Link>
+          &lt;EditIcon id="edit_icon_blog" fontSize="large" />
+          &lt;AutoStoriesIcon id="story_icon_blog" fontSize="large" />
+        &lt;/div>
+        &lt;div
+          style={{
+            height: "50vh",
+            borderRight: "1px solid black",
+            color: "grey",
+            display: "flex",
+            flexDirection: "column",
+            width: "100px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          &lt;PersonIcon fontSize="large" />
+        &lt;/div>
+      &lt;/div>
+      &lt;div className="dblog_head">&lt;/div>
+      &lt;hr>&lt;/hr>
+      {detailblogfetch ? (
+        &lt;>
+          &lt;div className="blog_heading">
+            &lt;h>{detailblog.title}&lt;/h>
+          &lt;/div>
+          &lt;div className="user_detail">
+            &lt;div className="user_icon_name">
+              &lt;div className="inner_user_icon">
+                &lt;PersonIcon fontSize="large" style={{ color: "grey" }} />
+                &lt;div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "15px",
+                  }}
+                >
+                  &lt;h>{detailblog.username}&lt;/h>
+                  &lt;span>just now&lt;/span>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="dblog_icons">
+              {/* &lt;FavoriteBorderTwoToneIcon fontSize='large' style={{color:'grey'}}/> */}
+              {/* &lt;ChatBubbleRoundedIcon fontSize='large' style={{color:'grey'}}/> */}
+              &lt;FacebookShareButton
+                url={shareurl}
+                quote={"This is an Blog Post post"}
+                hashtag={"#blog"}
+              >
+                &lt;IosShareRoundedIcon
+                  fontSize="large"
+                  style={{ color: "grey" }}
+                />
+              &lt;/FacebookShareButton>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="dblog_img">
+            &lt;img src={blogimg} />
+          &lt;/div>
+
+          &lt;div className="blog_content_body">
+            &lt;p>{detailblog.description}&lt;/p>
+          &lt;/div>
+          &lt;hr>&lt;/hr>
+          &lt;div className="comment_sec">
+            {/* &lt;AccountCircleTwoToneIcon style={{marginRight:'20px'}}/> */}
+            &lt;div className="comment_text">
+              &lt;div className="comment_box_sec">
+                {commentstate ? (
+                  &lt;>
+                    &lt;TextField
+                      id="standard-textarea"
+                      label=""
+                      error
+                      placeholder="Write a comment"
+                      multiline
+                      helperText="The Comment You Entered is Bad"
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      value={comment}
+                      variant="standard"
+                      fullWidth
+                    />
+                  &lt;/>
+                ) : (
+                  &lt;>
+                    &lt;TextField
+                      id="standard-textarea"
+                      label=""
+                      placeholder="Write a comment"
+                      multiline
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      value={comment}
+                      variant="standard"
+                      fullWidth
+                    />
+                  &lt;/>
+                )}
+              &lt;/div>
+              &lt;div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  paddingTop: "10px",
+                }}
+              >
+                &lt;Button
+                  variant="outlined"
+                  style={{ marginRight: "10px" }}
+                  onClick={cancelcomment}
+                >
+                  cancel
+                &lt;/Button>
+                &lt;Button variant="outlined" onClick={makecomment}>
+                  comment
+                &lt;/Button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+
+          &lt;div className="message_section">
+            &lt;h style={{ fontSize: "20px", fontWeight: "bold" }}>Comments&lt;/h>
+            {commentfetch?&lt;>
+            {blogcomment[0]?&lt;>
+              &lt;div className="comments_user">
+              {blogcomment.map((obj) => (
+                &lt;>
+                  &lt;div className="user_detail_icons">
+                    &lt;AccountCircleTwoToneIcon />
+                    &lt;span
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        marginLeft: "5px",
+                        marginRight: "5px",
+                      }}
+                    >
+                      {obj.username}
+                    &lt;/span>
+                    &lt;span style={{ fontWeight: "lighter" }}>just now&lt;/span>
+                  &lt;/div>
+                  &lt;div className="comment">
+                    &lt;h>{obj.comment}&lt;/h>
+                  &lt;/div>
+                &lt;/>
+              ))}
+            &lt;/div>
+            &lt;/>:&lt;div style={{marginTop:'70px',color:'grey'}}>No Comments found for this Post&lt;/div>}
+            &lt;/>:&lt;>
+            &lt;div style={{display:'flex',justifyContent:'center',marginTop:'50px'}}>
+            &lt;CircularProgress style={{color:'grey'}}/>
+            &lt;/div>
+            &lt;/>}
+          &lt;/div>
+
+          &lt;div className="fotter_mobile_blog_sec">
+            &lt;div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                zIndex: "-1",
+                marginLeft: "20%",
+                marginRight: "20%",
+                marginTop: "30px",
+                alignItems: "center",
+              }}
+            >
+              &lt;Link to="/authhome">
+                &lt;HomeIcon fontSize="large" style={{ color: "grey" }} />
+              &lt;/Link>
+              &lt;Link to="/write">
+                &lt;EditIcon fontSize="large" style={{ color: "grey" }} />
+              &lt;/Link>
+              &lt;Link to="">
+                &lt;AutoStoriesIcon fontSize="large" style={{ color: "grey" }} />
+              &lt;/Link>
+              &lt;Link to="/dashboard">
+                &lt;PersonIcon fontSize="large" style={{ color: "grey" }} />
+              &lt;/Link>
+            &lt;/div>
+          &lt;/div>
+        &lt;/>
+      ) : (
+        &lt;>
+          &lt;Backdrop
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={open}
+            onClick={handleclose}
+          >
+            &lt;CircularProgress color="inherit" />
+          &lt;/Backdrop>
+        &lt;/>
+      )}
+      &lt;div
+        style={{ textAlign: "center", height: "50px", marginTop: "10px" }}
+        className="hide_fotter_1"
+      >
+        &lt;hr style={{ width: "99%" }}>&lt;/hr>
+        &lt;p>© 2022 All rights reserved.&lt;/p>
+      &lt;/div>
+    &lt;/>
+  );
+}
+
+export default Detailblog;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Allblogs">Allblogs</a></li><li><a href="global.html#Authhome">Authhome</a></li><li><a href="global.html#baseURL">baseURL</a></li><li><a href="global.html#Blogs">Blogs</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Detailblog">Detailblog</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Read">Read</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#UpdateWrite">UpdateWrite</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#Write">Write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Oct 23 2022 00:36:45 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+
+.side-menu1{
+    display: flex;
+    flex-direction: column;
+    margin-left: 28px;
+    position: fixed;
+    
+}
+
+#add_icon{
+  margin-top: 310px;
+  margin-bottom: 100px;
+}
+
+#login_icon{
+    margin-top: 25px;
+}

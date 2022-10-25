@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/Read.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/Read.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import "../Styles/read.css";
+import Button from "@mui/material/Button";
+import axios from "../Axios.js";
+
+/**
+ * Blog readings
+ * @type {string}
+ */
+
+function Read() {
+  let navigate = useNavigate();
+  const [topics, setTopics] = useState([]);
+  const [selecttech, setSelecttech] = useState(false);
+  const [selectcul, setSelectcul] = useState(false);
+  const [selectpol, setSelectpol] = useState(false);
+  const [selectcry, setSelectcry] = useState(false);
+  const [selectedu, setSelectedu] = useState(false);
+  const [selectsci, setSelectsci] = useState(false);
+  const [selecthist, setSelecthist] = useState(false);
+  const [selecttra, setSelecttra] = useState(false);
+  const [selectnew, setSelectnew] = useState(false);
+
+  const addtopic = (event, param) => {
+    setTopics((current) => [...current, param.name]);
+    param.str(true);
+  };
+  const removetopic = (event, param) => {
+    setTopics((current) =>
+      current.filter((element) => {
+        return element !== param.name;
+      })
+    );
+    param.str(false);
+  };
+
+  const fetchtopicpost = () => {
+    console.log(topics[0]);
+    localStorage.setItem("topic", topics[0]);
+  };
+
+  const topicslist1 = [
+    { id: 1, name: "Technology", select: selecttech, str: setSelecttech },
+    { id: 2, name: "Culture", select: selectcul, str: setSelectcul },
+    { id: 3, name: "Politics", select: selectpol, str: setSelectpol },
+  ];
+
+  const topicslist2 = [
+    { id: 4, name: "Crypto", select: selectcry, str: setSelectcry },
+    { id: 5, name: "Science", select: selectsci, str: setSelectsci },
+    { id: 6, name: "Education", select: selectedu, str: setSelectedu },
+  ];
+
+  const topicslist3 = [
+    { id: 7, name: "History", select: selecthist, str: setSelecthist },
+    { id: 8, name: "Travel", select: selecttra, str: setSelecttra },
+    { id: 9, name: "News", select: selectnew, str: setSelectnew },
+  ];
+
+  console.log(topics);
+  console.log(selecttech);
+  return (
+    &lt;>
+      &lt;div className="topic_section">
+        &lt;div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "25px",
+          }}
+        >
+          &lt;div style={{ display: "flex", alignContent: "center" }}>
+            &lt;ArrowBackIcon style={{ color: "#808080" }} />
+            &lt;Link
+              to="/authhome"
+              style={{ textDecorationLine: "none", color: "GrayText" }}
+            >
+              &lt;h>Go back&lt;/h>
+            &lt;/Link>
+          &lt;/div>
+          &lt;Link to="/allblogs" style={{ textDecoration: "none" }}>
+            &lt;Button variant="outlined" color="warning">
+              Skip
+            &lt;/Button>
+          &lt;/Link>
+        &lt;/div>
+
+        &lt;div style={{ display: "flex", justifyContent: "center" }}>
+          &lt;h1>Dive into your interests&lt;/h1>
+        &lt;/div>
+        &lt;div className="reading_recommentation_text">
+          &lt;p style={{ color: "grey" }}>
+            We'll recommend top publications based on the topics you select
+          &lt;/p>
+        &lt;/div>
+        &lt;div className="reading_topics">
+          &lt;div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "20px",
+            }}
+          >
+            {topicslist1.map((topic) => {
+              return (
+                &lt;>
+                  {topic.select ? (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => removetopic(event, topic)}
+                        style={{ backgroundColor: "#808080", color: "white" }}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  ) : (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => addtopic(event, topic)}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  )}
+                &lt;/>
+              );
+            })}
+          &lt;/div>
+
+          &lt;div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "20px",
+            }}
+          >
+            {topicslist2.map((topic) => {
+              return (
+                &lt;>
+                  {topic.select ? (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => removetopic(event, topic)}
+                        style={{ backgroundColor: "#808080", color: "white" }}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  ) : (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => addtopic(event, topic)}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  )}
+                &lt;/>
+              );
+            })}
+          &lt;/div>
+
+          &lt;div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "20px",
+            }}
+          >
+            {topicslist3.map((topic) => {
+              return (
+                &lt;>
+                  {topic.select ? (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => removetopic(event, topic)}
+                        style={{ backgroundColor: "#808080", color: "white" }}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  ) : (
+                    &lt;>
+                      &lt;button
+                        className="each_ele"
+                        onClick={(event) => addtopic(event, topic)}
+                      >
+                        &lt;h>{topic.name}&lt;/h>
+                      &lt;/button>
+                    &lt;/>
+                  )}
+                &lt;/>
+              );
+            })}
+          &lt;/div>
+        &lt;/div>
+
+        &lt;div className="continue_btn_raed">
+          &lt;Link to={`/blogs/${topics[0]}`}>
+            &lt;button className="cont_btn">Continue&lt;/button>
+          &lt;/Link>
+        &lt;/div>
+      &lt;/div>
+      &lt;div
+        style={{
+          textAlign: "center",
+          height: "80px",
+          bottom: "0px",
+          width: "100%",
+          position: "fixed",
+        }}
+      >
+        &lt;hr style={{ width: "99%" }}>&lt;/hr>
+        &lt;p>© 2022 All rights reserved.&lt;/p>
+      &lt;/div>
+    &lt;/>
+  );
+}
+
+export default Read;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Allblogs">Allblogs</a></li><li><a href="global.html#Authhome">Authhome</a></li><li><a href="global.html#baseURL">baseURL</a></li><li><a href="global.html#Blogs">Blogs</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Detailblog">Detailblog</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Read">Read</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#UpdateWrite">UpdateWrite</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#Write">Write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Oct 23 2022 00:36:45 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/dashboard.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/dashboard.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useContext, useEffect } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Link, NavLink } from "react-router-dom";
+import "../Styles/dashboard.css";
+import pic from "../assets/Ellipse 4.png";
+import TextField from "@mui/material/TextField";
+import Skeleton from "@mui/material/Skeleton";
+import EditIcon from "@mui/icons-material/Edit";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import DeleteIcon from "@mui/icons-material/Delete";
+import UserContext from "../Context/UserContext";
+import axios from "../Axios.js";
+import UploadIcon from "@mui/icons-material/Upload";
+
+
+/**
+ * User Dashboard
+ * @type {string}
+ */
+function Dashboard() {
+  let {
+    logout,
+    userposts,
+    userblogpost,
+    userinfofetch,
+    userinfo,
+    blogfetched,
+    setFetchdp,
+    fetchdp
+  } = useContext(UserContext);
+
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [namesave, setNamesave] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [erropen, setErropen] = useState(false);
+  const [newusername, setNewusername] = useState("");
+  const [uploadprogress,setUploadprogress]=useState(0);
+
+  useEffect(() => {
+    userposts();
+  }, []);
+  useEffect(() => {
+    userinfofetch();
+  }, []);
+
+  console.log(userinfo);
+  const [edit, setEdit] = useState(true);
+
+  const makeedit = () => {
+    setEdit(false);
+  };
+
+  const changeusername = () => {
+    setEdit(true);
+    setNamesave(true);
+    const namechangeapi = "api/auth/changeusername";
+    const body = JSON.stringify({ username: newusername });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+    };
+
+    axios
+      .put(namechangeapi, body, config)
+      .then((res) => {
+        if (res.status == 200) {
+          setNamesave(false);
+          userinfofetch();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // post to database apis
+  };
+  const deletepost = (id) => {
+    console.log(id);
+    const deleteapi = `api/posts/deletePost/${id}`;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+    };
+    axios.delete(deleteapi, config).then((res) => {
+      if (res.status == 200) {
+        userposts();
+      }
+    });
+  };
+  const UpdateUserPassword = (e) => {
+    e.preventDefault();
+    const pass1 = password1;
+    const pass2 = password2;
+    const UpdatePassapi = "api/auth/changepw";
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+    };
+    const body = JSON.stringify({ newpass: pass2 });
+    if (pass1 === pass2) {
+      axios
+        .put(UpdatePassapi, body, config)
+        .then((res) => {
+          if (res.status == 200) {
+            setPassword1("");
+            setPassword2("");
+            setOpen(true);
+          }
+        })
+        .catch((err) => {
+          setErropen(true);
+          console.log("Password Not Changed");
+        });
+    } else {
+      alert("passwords are not matching");
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const closemsg = () => {
+    setOpen(false);
+  };
+  const closemsgerror = () => {
+    setErropen(false);
+  };
+
+  const getupdatedval = (e) => {
+    const updatedname = e.target.value;
+    setNewusername(updatedname);
+  };
+  let fd = new FormData();
+  const uploaduserpic = () => {
+    document.getElementById("blogimg").click();
+  };
+  const FileSelectHandler = (event) => {
+    if (event.target &amp;&amp; event.target.files[0]) {
+      console.log("pic selected");
+      console.log(event.target.files[0]);
+      fd.append("image", event.target.files[0]);
+    }
+    // setHidecambtn(false)
+    // setHideuploadbtn(true)
+  };
+  const uploadpic = () => {
+    const userdpapi = "api/auth/changedp";
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "auth-token": localStorage.getItem("user_token"),
+      },
+      onUploadProgress:(data)=>{
+        let progress=Math.round((data.loaded/data.total)*100)
+        setUploadprogress(progress>=100 ? 0:progress)
+      }, 
+    };
+    axios
+      .put(userdpapi,fd,config)
+      .then((res) => {
+        if(res.status==200){
+          userinfofetch();
+        }
+        
+        
+      })
+      .catch((err) => {
+        console.log(err.data);
+      });
+  };
+  return (
+    &lt;div className="dashmain">
+      &lt;div className="dashback_logout">
+        &lt;div style={{ display: "flex" }}>
+          &lt;ArrowBackIcon style={{ color: "#808080" }} />
+          &lt;Link
+            to="/authhome"
+            style={{ textDecorationLine: "none", color: "GrayText" }}
+          >
+            &lt;h>Go back&lt;/h>
+          &lt;/Link>
+        &lt;/div>
+        &lt;h style={{ fontWeight: "bold", cursor: "pointer" }} onClick={logout}>
+          Logout
+        &lt;/h>
+      &lt;/div>
+      &lt;div
+        style={{ display: "flex", justifyContent: "center", margin: "40px" }}
+      >
+        &lt;h1>Profile Settings&lt;/h1>
+      &lt;/div>
+
+      &lt;div className="profile">
+        &lt;div className="pic_username">
+          &lt;div className="profile_pic">
+            {userinfo ? (
+              &lt;>
+                {userinfo.profilepic ? (
+                  &lt;div style={{ position: "relative" }}>
+                    &lt;img
+                      src={`data:image/jpeg;base64,${userinfo.profilepic}`}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        display: "block",
+                      }}
+                    />
+                    {fetchdp?&lt;div className="profilepicloader-box">
+                    &lt;CircularProgress  className="profilepicloader" style={{color:'green'}}/>
+                    &lt;/div>:&lt;div className="picuploadprogress-box">
+                    &lt;CircularProgress variant="determinate" value={uploadprogress} className="picuploadprogress" />
+                    &lt;/div>}  
+                  &lt;/div>
+                ) : (
+                  &lt;div style={{ position: "relative" }}>
+                     &lt;img
+                      src={pic}
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                   &lt;div className="profilepicloader-box">
+                    &lt;CircularProgress  className="profilepicloader" style={{color:'green'}}/>
+                    &lt;/div>
+                  &lt;/div>
+                )}
+              &lt;/>
+            ) : (
+              &lt;>
+                &lt;CircularProgress
+                  style={{
+                    height: "30px",
+                    width: "30px",
+                    marginTop: "30px",
+                    color: "grey",
+                  }}
+                />
+              &lt;/>
+            )}
+
+            &lt;button
+              type="button"
+              onClick={uploaduserpic}
+              style={{ backgroundColor: "white", border: "none" }}
+            >
+              &lt;CameraAltIcon className="profilepicico" />
+            &lt;/button>
+            &lt;input
+              id="blogimg"
+              type="file"
+              style={{ display: "none" }}
+              onChange={FileSelectHandler}
+            />
+
+            &lt;UploadIcon onClick={uploadpic} className="profileuploadico" />
+          &lt;/div>
+          &lt;div className="profile_username">
+            &lt;div>
+              &lt;h>Username&lt;/h>
+            &lt;/div>
+            &lt;div style={{ display: "flex" }}>
+              {!fetchdp ? (
+                &lt;>
+                  &lt;TextField
+                    id="standard-read-only-input"
+                    label=""
+                    value={userinfo.username}
+                    InputProps={{
+                      readOnly: false,
+                    }}
+                    variant="standard"
+                    onChange={getupdatedval}
+                  />
+                &lt;/>
+              ) : (
+                &lt;>&lt;CircularProgress  style={{color:'blue',height:'30px',width:'30px',marginTop:'45px',margin:'5px'}}/>&lt;/>
+              )}
+
+              &lt;EditIcon
+                style={{ color: "grey", cursor: "pointer" }}
+                onClick={makeedit}
+              />
+            &lt;/div>
+            &lt;div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {edit ? (
+                &lt;>&lt;/>
+              ) : (
+                &lt;>
+                  &lt;button
+                    style={{
+                      backgroundColor: "#3CB371",
+                      borderRadius: "30px",
+                      color: "white",
+                      border: "none",
+                      marginTop: "20px",
+                      width: "60px",
+                      height: "30px",
+                      cursor: "pointer",
+                    }}
+                    onClick={changeusername}
+                  >
+                    Save
+                  &lt;/button>
+                &lt;/>
+              )}
+              {namesave ? (
+                &lt;>
+                  &lt;CircularProgress
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                      marginTop: "30px",
+                      color: "green",
+                    }}
+                  />
+                &lt;/>
+              ) : (
+                &lt;>&lt;/>
+              )}
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;form onSubmit={UpdateUserPassword}>
+          &lt;div className="change_password">
+            &lt;h style={{ marginTop: "10px" }}>Change Password&lt;/h>
+            &lt;TextField
+              id="standard-search"
+              label="New Password"
+              type="search"
+              onChange={(e) => setPassword1(e.target.value)}
+              variant="standard"
+              value={password1}
+              style={{ marginTop: "15px" }}
+            />
+            &lt;TextField
+              id="standard-search"
+              label="Confirm Password"
+              type="password"
+              onChange={(e) => setPassword2(e.target.value)}
+              variant="standard"
+              value={password2}
+              style={{ marginTop: "15px" }}
+            />
+            &lt;button
+              style={{
+                backgroundColor: "#3CB371",
+                color: "white",
+                border: "none",
+                marginTop: "20px",
+                width: "60px",
+                height: "30px",
+                cursor: "pointer",
+              }}
+              type="submit"
+            >
+              Done
+            &lt;/button>
+          &lt;/div>
+          {open ? (
+            &lt;>
+              &lt;Alert
+                onClose={() => {
+                  closemsg();
+                }}
+                style={{ marginTop: "10px" }}
+              >
+                Password Updated!
+              &lt;/Alert>
+            &lt;/>
+          ) : (
+            &lt;>&lt;/>
+          )}
+          {erropen ? (
+            &lt;>
+              &lt;Alert
+                onClose={() => {
+                  closemsgerror();
+                }}
+                style={{ marginTop: "10px" }}
+                severity="error"
+              >
+                Password Not Updated!
+              &lt;/Alert>
+            &lt;/>
+          ) : (
+            &lt;>&lt;/>
+          )}
+        &lt;/form>
+      &lt;/div>
+
+      &lt;div className="user_posts_head">
+        &lt;h1>Posts&lt;/h1>
+        {blogfetched ? (
+          &lt;>
+            {userblogpost[0] ? (
+              &lt;>
+                &lt;div className="user_posts">
+                  {userblogpost.map((obj) => (
+                    &lt;div className="user_post">
+                      &lt;div className="post_head">
+                        &lt;h>{obj.title}&lt;/h>
+                        &lt;NavLink
+                          to={`/blog/${obj._id}`}
+                          style={{ color: "grey" }}
+                        >
+                          &lt;ArrowForwardIcon />
+                        &lt;/NavLink>
+                      &lt;/div>
+                      &lt;div className="post_content">
+                        &lt;span style={{ color: "#808080" }}>
+                          jan 8 at 8:10 pm
+                        &lt;/span>
+                        &lt;div style={{ display: "flex", alignItems: "center" }}>
+                          {/* &lt;FavoriteBorderOutlinedIcon style={{color:'#808080'}}/>&lt;span>100&lt;/span> */}
+                        &lt;/div>
+                        {/* &lt;CommentIcon style={{cursor:'pointer',color:'#808080'}}/> */}
+
+                        &lt;DeleteIcon
+                          style={{ color: "#808080", cursor: "pointer" }}
+                          onClick={(e) => deletepost(obj._id)}
+                        />
+                        &lt;Link to={`/updatepost/${obj._id}`}>
+                          &lt;EditIcon
+                            style={{ color: "#808080", cursor: "pointer" }}
+                          />
+                        &lt;/Link>
+                      &lt;/div>
+                      &lt;div className="post_view">
+                        &lt;h
+                          style={{
+                            marginLeft: "40px",
+                            fontSize: "40px",
+                            color: "grey",
+                          }}
+                        >
+                          2
+                        &lt;/h>
+                        &lt;h style={{ color: "grey" }}>TOTAL VIEWS&lt;/h>
+                      &lt;/div>
+                    &lt;/div>
+                  ))}
+                &lt;/div>
+              &lt;/>
+            ) : (
+              &lt;>
+                &lt;div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  &lt;h1 style={{ color: "grey" }}>No Posts Yet by the user&lt;/h1>
+                &lt;/div>
+              &lt;/>
+            )}
+          &lt;/>
+        ) : (
+          &lt;>
+            &lt;Skeleton variant="rectangular" width={300} height={250} />
+            &lt;Skeleton
+              variant="rectangular"
+              width={300}
+              height={250}
+              style={{ margin: "20px" }}
+            />
+            &lt;Skeleton variant="rectangular" width={300} height={250} />
+          &lt;/>
+        )}
+      &lt;/div>
+
+      &lt;div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: "50px",
+          textAlign: "center",
+        }}
+      >
+        &lt;hr style={{ width: "99%" }}>&lt;/hr>
+        &lt;p>© 2022 All rights reserved.&lt;/p>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default Dashboard;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Allblogs">Allblogs</a></li><li><a href="global.html#Authhome">Authhome</a></li><li><a href="global.html#baseURL">baseURL</a></li><li><a href="global.html#Blogs">Blogs</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Detailblog">Detailblog</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Read">Read</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#UpdateWrite">UpdateWrite</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#Write">Write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Oct 23 2022 00:36:45 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

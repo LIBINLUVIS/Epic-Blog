@@ -1,0 +1,142 @@
+.dashback_logout{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+}
+.profile{
+    display: flex;
+    justify-content: center;
+    
+}
+.pic_username{
+    display: flex;
+    
+   
+}
+.profile_pic{
+    display: flex;
+  
+}
+.profileuploadico{
+    color:grey;
+     cursor:pointer;
+    margin-top: 90px;
+}
+.profilepicico{
+    color: grey;
+    cursor: pointer;
+}
+.profile_username{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-left: 30px;
+}
+.change_password{
+    display: flex;
+    flex-direction: column;
+    margin-left: 300px;
+}
+.user_posts_head{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+.user_post{
+    background-color:#EDEDED;
+    height: 250px;
+    width: 900px;
+    margin-top: 10px;
+    margin-left: 1%;
+}
+.user_posts{
+    
+    height: 300px;
+    width: 900px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  
+    
+}
+.user_posts::-webkit-scrollbar{
+    display: none;
+}
+.post_head{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top:20px ;
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+.post_content{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+.post_view{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    margin-left: 40%;
+   
+}
+
+.profilepicloader-box{
+    bottom: 120px;
+    position:absolute;
+    left: 30px;
+}
+.picuploadprogress-box{
+    bottom: 120px;
+    position:absolute;
+    left: 30px;
+}
+
+
+
+@media only screen and (max-width: 900px){
+   .profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   }
+   .profilepicloader-box{
+    bottom: 45px;
+   
+}
+.picuploadprogress-box{
+    bottom: 60px;
+    
+}
+
+   .change_password{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 380px;
+   }
+   .user_posts{
+    width: 600px;
+   }
+   .user_post{
+    width: 598px;
+   }
+   .profilepicico{
+     margin-top: 90px;
+    } 
+  
+
+}
+@media only screen and (max-width:635px){
+    .user_posts{
+        width: 350px;
+    }
+    .user_post{
+        width: 348px;
+    }
+}

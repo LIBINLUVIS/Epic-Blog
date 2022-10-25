@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/Blogs.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/Blogs.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import "../Styles/blogs.css";
+import HomeIcon from "@mui/icons-material/Home";
+import EditIcon from "@mui/icons-material/Edit";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import PersonIcon from "@mui/icons-material/Person";
+import dumyimg from "../assets/Rectangle 44.png";
+import { Link, NavLink, useParams } from "react-router-dom";
+import bot from "../assets/chatbot.png";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import CloseIcon from "@mui/icons-material/Close";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import SendIcon from "@mui/icons-material/Send";
+import TextField from "@mui/material/TextField";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "../Axios.js";
+
+
+/**
+ * Fetching the blogs with category
+ * @type {string}
+ */
+function Blogs() {
+  const { id } = useParams();
+  console.log(id);
+
+  const [selectbot, setSelectbot] = useState(false);
+  const [categoryblog, setCategoryblog] = useState([]);
+  const [categoryblogfetched, setCategoryblogfetched] = useState(false);
+  const [date, setdate] = useState("");
+  const [rerender, setrerender] = useState(0);
+  const [open, setOpen] = React.useState(false);
+  const handleclose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+
+  useEffect(() => {
+    setdate(
+      new Date(categoryblog.timestamp).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      })
+    );
+    setTimeout(() => {
+      if (rerender == 0) {
+        setrerender(1);
+        console.log("rerender");
+        console.log(date);
+      }
+    }, 1500);
+
+    // eslint-disable-next-line
+  }, [rerender]);
+
+  const chatbot = () => {
+    setSelectbot(true);
+  };
+  const closechatbot = () => {
+    setSelectbot(false);
+  };
+  console.log(categoryblog);
+  useEffect(() => {
+    console.log("hello");
+    handleToggle();
+    const catgeoryfetchapi = `api/posts/categoricalfetch/${id}`;
+    axios.get(catgeoryfetchapi).then((res) => {
+      if (res.status == 200) {
+        console.log(res.data);
+        setCategoryblog(res.data);
+        handleclose();
+        setCategoryblogfetched(true)
+      }
+    });
+  }, []);
+
+  return (
+    &lt;div className="main_blogs_container">
+      &lt;div className="blog_sec_sidemenu">
+        &lt;div className="blog_side_icons">
+          &lt;Link to="/authhome" style={{ color: "grey" }}>
+            &lt;HomeIcon id="home_icon_blog" fontSize="large" />
+          &lt;/Link>
+          &lt;EditIcon id="edit_icon_blog" fontSize="large" />
+          &lt;AutoStoriesIcon id="story_icon_blog" fontSize="large" />
+        &lt;/div>
+        &lt;div
+          style={{
+            height: "50vh",
+            borderRight: "1px solid black",
+            color: "grey",
+            display: "flex",
+            flexDirection: "column",
+            width: "100px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          &lt;PersonIcon fontSize="large" />
+        &lt;/div>
+      &lt;/div>
+
+      &lt;div className="blog_head">
+        &lt;h1>Inbox&lt;/h1>
+        {/* &lt;div className='text_area1'>
+     &lt;TextField id="standard-basic" label="" variant="standard" style={{marginTop:'9px'}}/>
+     &lt;SearchIcon style={{marginTop:'10px',color:'grey',cursor:'pointer'}}/>
+     &lt;/div> */}
+      &lt;/div>
+      &lt;>
+        &lt;hr style={{ width: "99%" }}>&lt;/hr>
+      &lt;/>
+
+      &lt;div className="blog_section">
+        &lt;div className="blogs">
+          &lt;div className="blogs_scroll">
+            {categoryblogfetched ? (
+              &lt;>
+                {categoryblog[0] ? (
+                  &lt;>
+                    {categoryblog.map((obj) => (
+                      &lt;div className="blog_box">
+                        &lt;div className="ineer_blog_head">
+                          &lt;span>
+                            &lt;NavLink
+                              to={`/blog/${obj._id}`}
+                              style={{ color: "grey" }}
+                            >
+                              &lt;ArrowForwardIcon />
+                            &lt;/NavLink>
+                          &lt;/span>
+                          &lt;span>{obj.username}&lt;/span>
+                          &lt;span>{obj.timestamp}&lt;/span>
+                        &lt;/div>
+                        &lt;div
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: "thin",
+                            marginLeft: "25px",
+                            marginTop: "10px",
+                          }}
+                        >
+                          &lt;h>{obj.title}&lt;/h>
+                        &lt;/div>
+                        &lt;div className="inner_blog_body">
+                          &lt;img src={dumyimg} />
+                          &lt;p>{obj.description}....&lt;/p>
+
+                          {/* &lt;NavLink to={`/blog/${obj._id}`} style={{textDecoration:'none',cursor:'pointer'}}>
+              read more
+              &lt;/NavLink> */}
+                        &lt;/div>
+                      &lt;/div>
+                    ))}
+                  &lt;/>
+                ) : (
+                  &lt;>
+                    &lt;h1 style={{ color: "grey" }}>
+                      No Posts Yet For this Topic
+                    &lt;/h1>
+                  &lt;/>
+                )}
+              &lt;/>
+            ) : (
+              &lt;>
+                &lt;Backdrop
+                  sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                  }}
+                  open={open}
+                  onClick={handleclose}
+                >
+                  &lt;CircularProgress color="inherit"/>
+                &lt;/Backdrop>
+              &lt;/>
+            )}
+          &lt;/div>
+        &lt;/div>
+
+        &lt;div className="chat_bot">
+          {selectbot ? (
+            &lt;>
+              &lt;div className="chat_area1">
+                &lt;div className="cross_icon">
+                  &lt;CloseIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={closechatbot}
+                  />
+                &lt;/div>
+                &lt;div className="message_box">
+                  &lt;div className="user_query">
+                    &lt;PersonIcon style={{ color: "blue" }} />
+                    &lt;div className="user_msg">
+                      &lt;h>hello&lt;/h>
+                    &lt;/div>
+                  &lt;/div>
+
+                  &lt;div className="bot_query">
+                    &lt;SmartToyIcon style={{ color: "orange" }} />
+                    &lt;div className="bot_result">
+                      &lt;h>hai...&lt;/h>
+                    &lt;/div>
+                  &lt;/div>
+                &lt;/div>
+                &lt;div className="text_box">
+                  &lt;div className="text_area">
+                    &lt;TextField
+                      id="standard-basic"
+                      label=""
+                      variant="standard"
+                    />
+                  &lt;/div>
+                  &lt;SendIcon style={{ color: "grey", cursor: "pointer" }} />
+                &lt;/div>
+              &lt;/div>
+            &lt;/>
+          ) : (
+            &lt;>
+              &lt;div className="chat_area2">
+                &lt;div className="cross_icon">&lt;/div>
+                &lt;div className="message_box">&lt;/div>
+              &lt;/div>
+            &lt;/>
+          )}
+          &lt;div className="chatbot">
+            &lt;img src={bot} onClick={chatbot} />
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      &lt;div
+        style={{ textAlign: "center", height: "100px", marginTop: "auto" }}
+        className="hide_fotter"
+      >
+        &lt;hr style={{ width: "99%" }}>&lt;/hr>
+        &lt;p>© 2022 All rights reserved.&lt;/p>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default Blogs;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Allblogs">Allblogs</a></li><li><a href="global.html#Authhome">Authhome</a></li><li><a href="global.html#baseURL">baseURL</a></li><li><a href="global.html#Blogs">Blogs</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Detailblog">Detailblog</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Read">Read</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#UpdateWrite">UpdateWrite</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#Write">Write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Oct 23 2022 00:36:45 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

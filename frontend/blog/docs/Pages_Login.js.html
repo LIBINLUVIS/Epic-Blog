@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/Login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/Login.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useContext, useEffect } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import UserContext from "../Context/UserContext";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import "../Styles/login.css";
+import "../Styles/homemain.css";
+import { Link } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  textField: {
+    width: 400,
+    [theme.breakpoints.down("md")]: {
+      width: 300,
+    },
+  },
+}));
+
+/**
+ * Login Function
+ * @type {string}
+ */
+function Login() {
+  const classes = useStyles();
+  let { loginUser, userlogin, loginerror, networkerror } =
+    useContext(UserContext);
+
+  return (
+    &lt;div className="main">
+      &lt;div className="loginhead">
+        &lt;ArrowBackIcon style={{ color: "#808080" }} />
+        &lt;Link to="/" className="backlink">
+          &lt;h>Go back&lt;/h>
+        &lt;/Link>
+      &lt;/div>
+      &lt;div className="logintext">
+        &lt;h1>Login&lt;/h1>
+      &lt;/div>
+      &lt;div>
+        &lt;form onSubmit={loginUser} className="loginauth">
+          &lt;TextField
+            id="standard-basic"
+            label="Username"
+            variant="standard"
+            className={classes.textField}
+            name="username"
+            required
+          />
+          &lt;TextField
+            id="standard-basic"
+            label="Password"
+            variant="standard"
+            className={classes.textField}
+            name="password"
+          />
+          {loginerror ? (
+            &lt;>
+              &lt;Alert
+                variant="outlined"
+                severity="error"
+                style={{ marginTop: "10px" }}
+              >
+                Password or Username incorrect — check it out!
+              &lt;/Alert>
+            &lt;/>
+          ) : (
+            &lt;>&lt;/>
+          )}
+          {networkerror ? (
+            &lt;>
+              &lt;Alert
+                variant="outlined"
+                severity="error"
+                style={{ marginTop: "10px" }}
+              >
+                Network Error — check it out!
+              &lt;/Alert>
+            &lt;/>
+          ) : (
+            &lt;>&lt;/>
+          )}
+          {userlogin ? (
+            &lt;>
+              &lt;Button
+                variant="contained"
+                disableElevation
+                style={{
+                  marginTop: "80px",
+                  borderRadius: "50px",
+                  width: "300px",
+                  height: "60px",
+                  backgroundColor: "#FF6719",
+                }}
+                type="submit"
+              >
+                &lt;CircularProgress style={{ color: "white" }} />
+              &lt;/Button>
+            &lt;/>
+          ) : (
+            &lt;>
+              &lt;Button
+                variant="contained"
+                disableElevation
+                style={{
+                  marginTop: "80px",
+                  borderRadius: "50px",
+                  width: "300px",
+                  height: "60px",
+                  backgroundColor: "#FF6719",
+                }}
+                type="submit"
+              >
+                Login
+              &lt;/Button>
+            &lt;/>
+          )}
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default Login;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Allblogs">Allblogs</a></li><li><a href="global.html#Authhome">Authhome</a></li><li><a href="global.html#baseURL">baseURL</a></li><li><a href="global.html#Blogs">Blogs</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Detailblog">Detailblog</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Read">Read</a></li><li><a href="global.html#Signup">Signup</a></li><li><a href="global.html#UpdateWrite">UpdateWrite</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#Write">Write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Oct 23 2022 00:36:45 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
