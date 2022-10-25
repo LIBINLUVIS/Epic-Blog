@@ -30,7 +30,7 @@ router.post("/postComment/:id", fetchUser, async (req, res) => {
         const { comment } = req.body
 
         const  safe = await axios.post(
-            'http://20.97.134.74/',
+            '',
             {
                 body: JSON.stringify({comment}),
                 headers: {
