@@ -1,0 +1,14 @@
+.side-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 28px;
+    
+}
+#create_icon{
+    margin: 25px;
+}
+
+
+
+

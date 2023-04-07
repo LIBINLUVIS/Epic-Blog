@@ -1,0 +1,233 @@
+.dblog_head{
+    padding-top: 50px;
+}
+.blog_heading{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 160px;
+    padding-top: 20px;
+
+}
+.blog_side_icons{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100px;
+    height: 65vh;
+    align-items: center;
+    
+    color: grey;
+    border-right: 1px solid black;
+ 
+}
+.blog_heading h{
+    font-size: 30px;
+    font-weight: 500;
+    
+}
+.user_detail{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.user_icon_name{
+    display: flex;
+    margin: 10px;
+    margin-left: 150px;
+    margin-top: 20px;
+}
+.inner_user_icon h{
+    font-weight: bold;
+}
+
+.dblog_icons{
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    margin: 20px;
+    margin-right: 150px;
+    margin-top: 35px;
+    
+}
+.inner_user_icon{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+
+.blog_content_body p{
+    font-family: Inria Serif;
+    font-size: 20px;
+    line-height: 35px;
+}
+.dblog_img{
+    margin-left: 160px;
+}
+.dblog_img img{
+    height: 400px;
+    width: 900px;
+}
+.comment_sec{
+    display: flex;
+    margin-left: 160px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    align-items: center;
+}
+.comment_text{
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+  
+
+}
+.message_section{
+  display: flex;
+  flex-direction: column;
+  margin-left: 160px;
+}
+
+
+.comments_user{
+    height: 200px;
+    margin: 5px;
+    overflow-y: scroll;
+   
+}
+.comment{
+    padding-left: 100px;
+    margin: 10px;
+    overflow-y: scroll;
+}
+.user_detail_icons{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.fotter_mobile_blog_sec{
+    display: none;
+    border-style: solid;
+    border-width: thin;
+    border-color: grey;
+}
+.blog_content_body{
+    height: auto;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-left: 160px;
+}
+@media only screen and (min-width:800px) and (max-width:1370px){
+    .hide_fotter_1{
+        display: none;
+    }
+    .dblog_img img{
+        height: 200px;
+        width: 200px;
+    }
+    .fotter_mobile_blog_sec{
+        display: block;
+        background-color: white;
+    }
+ 
+    .blog_content_body{
+        
+       margin-right: 5%;
+        margin-bottom: 20px;
+        overflow-y: visible;
+
+    }
+    .blog_content_body p{
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .comment_text{
+        margin-right: 5%;
+        
+    }
+
+}
+@media only screen and (min-width:500px) and (max-width:800px){
+    .hide_fotter_1{
+        display: none;
+    }
+    .dblog_img img{
+        height: 200px;
+        width: 200px;
+    }
+    .fotter_mobile_blog_sec{
+        display: block;
+        background-color: white;
+    }
+    .blog_content_body{
+       margin-right: 5%;
+        margin-bottom: 20px;
+        overflow-y: visible;
+    }
+    .blog_content_body p{
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .dblog_icons{
+        margin-right: 30px;
+    }
+    .comment_text{
+        margin-right: 5%;
+        
+    }
+    .comments_user{
+        margin-right: 5%;
+    }
+
+}
+@media only screen and (max-width:500px){
+    .blog_heading{
+        margin-left: 5%;
+    }
+    .user_icon_name{
+        margin-left: 5%;
+    }
+    .dblog_img{
+        margin-left: 7%;
+    }
+    .dblog_img img{
+        height: 200px;
+        width: auto;
+    }
+    .blog_content_body{
+        margin-left: 5%;
+        margin-right: 5%;
+       
+    }
+    .comment_sec{
+      margin-left: 5%;
+    }
+    .message_section{
+        margin-left: 5%;
+    }
+
+    .hide_fotter_1{
+        display: none;
+    }
+    .fotter_mobile_blog_sec{
+        display: block;
+        background-color: white;
+    }
+
+    .blog_content_body p{
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .dblog_icons{
+        margin-right: 30px;
+    }
+    .comment_text{
+        margin-right: 5%;
+        
+    }
+    .comments_user{
+        margin-right: 5%;
+    }
+}   
